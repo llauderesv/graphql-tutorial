@@ -1,0 +1,51 @@
+scalar DateTime
+
+# Type for User
+type User {
+  githubLogin: ID!
+  name: String
+  avatar: String
+  postedPhotos: [Photo!]!
+  inPhotos: [Photo!]!
+}
+
+# Enumeration for Photo Categories
+enum PhotoCategory {
+  SELFIE
+  PORTRAIT
+  ACTION
+  LANDSCAPE
+  GRAPHIC
+}
+
+# Photo type definition
+type Photo {
+  id: ID!
+  url: String!
+  name: String!
+  description: String
+  category: PhotoCategory!
+  created: DateTime!
+  postedBy: User!
+  taggedUsers: [User!]!
+}
+
+# Use in a mutation to handle multiple parameters
+input PostPhotoInput {
+  name: String!
+  description: String
+  category: PhotoCategory = PORTRAIT
+}
+
+# The "Query" type is special: it lists all of the available queries that
+# clients can execute, along with the return type for each. In this
+# case, the "books" query returns an array of zero or more Books (defined above).
+type Query {
+  allPhotos: [Photo!]!
+  totalPhotos: Int!
+  allUsers: [User!]!
+}
+
+type Mutation {
+  postPhoto(input: PostPhotoInput!): Photo!
+}

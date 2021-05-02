@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "llaudevc",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server-express": "2.24.0",
+    "express": "4.17.1",
+    "graphql": "15.5.0",
+    "graphql-playground-middleware-express": "1.7.22",
+    "nodemon": "2.0.7"
+  }
+}
