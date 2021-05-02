@@ -1,8 +1,14 @@
 scalar DateTime
 
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
 # Type for User
 type User {
   githubLogin: ID!
+  githubToken: String
   name: String
   avatar: String
   postedPhotos: [Photo!]!
@@ -41,11 +47,15 @@ input PostPhotoInput {
 # clients can execute, along with the return type for each. In this
 # case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
+  me: User
   allPhotos: [Photo!]!
   totalPhotos: Int!
   allUsers: [User!]!
+  totalUsers: Int!
 }
 
 type Mutation {
   postPhoto(input: PostPhotoInput!): Photo!
+  githubAuth(code: String!): AuthPayload!
+  addFakeUsers(count: Int = 1): [User!]!
 }

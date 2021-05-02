@@ -1,113 +1,54 @@
 import express from 'express';
+import mongodb from 'mongodb';
+import { readFileSync } from 'fs';
 import { ApolloServer } from 'apollo-server-express';
 import expressPlayground from 'graphql-playground-middleware-express';
-import { readFileSync } from 'fs';
-import path from 'path';
+import resolvers from './resolvers';
+import dotenv from 'dotenv';
 
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
-const typeDefs = readFileSync(
-  path.resolve(__dirname, 'typeDefs.graphql'),
-  'utf-8'
-);
+const { MongoClient } = mongodb;
 
-let _id = 0;
+// Loads .env file into process.env process in Node JS...
+dotenv.config();
 
-const users = [
-  { githubLogin: 'mHattrup', name: 'Mike Hattrup' },
-  { githubLogin: 'gPlake', name: 'Glen Plake' },
-  { githubLogin: 'sSchmidt', name: 'Scot Schmidt' },
-];
+// start asynchronously the express app...
+(async function () {
+  // A schema is a collection of type definitions (hence "typeDefs")
+  // that together define the "shape" of queries that are executed against
+  // your data.
+  const typeDefs = readFileSync('./typeDefs.graphql', 'utf-8');
 
-const photos = [
-  {
-    id: '1',
-    name: 'Dropping the Heart Chute',
-    description: 'The heart chute is one of my favorite chutes',
-    category: 'ACTION',
-    githubUser: 'gPlake',
-  },
-  {
-    id: '2',
-    name: 'Enjoying the sunshine',
-    category: 'SELFIE',
-    githubUser: 'sSchmidt',
-  },
-  {
-    id: '3',
-    name: 'Gunbarrel 25',
-    description: '25 laps on gunbarrel today',
-    category: 'LANDSCAPE',
-    githubUser: 'sSchmidt',
-  },
-];
+  const app = express();
+  const MONGO_DB = process.env.DB_HOST;
 
-const tags = [
-  { photoID: '1', userID: 'gPlake' },
-  { photoID: '2', userID: 'sSchmidt' },
-  { photoID: '2', userID: 'mHattrup' },
-  { photoID: '2', userID: 'gPlake' },
-];
+  const client = await MongoClient.connect(MONGO_DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  const db = client.db();
 
-// Resolver is used to resolved the query from the client to the associated data source to be connected with in graphql.
-const resolvers = {
-  Photo: {
-    created: parent => new Date().toISOString(),
-    url: parent => {
-      console.log(parent);
-      return `http://yoursite.com/img/${parent.id}.jpg`;
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async function ({ req }) {
+      const githubToken = req.headers.authorization;
+      const currentUser = await db.collection('users').findOne({ githubToken });
+      return { db, currentUser };
     },
-    taggedUsers: parent =>
-      tags
-        .filter(tag => tag.photoID === parent.id)
-        .map(({ userID }) => users.find(u => u.githubLogin === userID)), // Get user taggedPhoto from users array...
-    postedBy: parent => users.find(u => u.githubLogin === parent.githubUser),
-  },
-  User: {
-    postedPhotos: parent =>
-      photos.filter(x => x.githubUser === parent.githubLogin),
-    inPhotos: parent =>
-      tags
-        .filter(tag => tag.userID === parent.githubLogin)
-        .map(({ photoID }) => photos.find(p => p.id === photoID)),
-  },
-  Query: {
-    totalPhotos: () => photos.length,
-    allPhotos: () => photos,
-    allUsers: () => users,
-  },
-  Mutation: {
-    postPhoto(parent, args) {
-      const newPhoto = {
-        id: _id++,
-        ...args.input,
-      };
+  });
 
-      photos.push(newPhoto);
-      return newPhoto;
-    },
-  },
-};
+  server.applyMiddleware({ app });
 
-const app = express();
+  const _expressPlayground = expressPlayground.default;
 
-const server = new ApolloServer({ typeDefs, resolvers });
+  app.get('/', (req, res) => res.end('Hello World!'));
+  app.get('/playground', _expressPlayground({ endpoint: '/graphql' }));
 
-server.applyMiddleware({ app });
+  const PORT = process.env.PORT || 4000;
 
-app.get('/', (req, res) => res.end('Hello World!'));
-
-app.get('/playground', expressPlayground({ endpoint: '/graphql' }));
-
-const PORT = process.env.PORT || 4000;
-
-app.listen(PORT, () => {
-  console.log(
-    `GraphQL Server running @ http://localhost:${PORT}{server.graphqlPath}`
-  );
-});
-
-// server.listen().then(({ url }) => console.log(`Server ready at ${url}`));
-
-// Design your schema based on how data is used, not based on how it's stored.
+  app.listen(PORT, () => {
+    console.log(
+      `GraphQL Server running @ http://localhost:${PORT}${server.graphqlPath}`
+    );
+  });
+})();
