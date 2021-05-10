@@ -12,25 +12,11 @@ const ME_QUERY = gql`
   }
 `;
 
-const Me = ({ logout, requestCode, signIn }) => {
-  const { loading, error, data, refetch } = useQuery(ME_QUERY);
-
-  useEffect(() => {
-    signIn && refetch();
-  }, [signIn]);
+const Me = ({ logout }) => {
+  const { loading, error, data } = useQuery(ME_QUERY);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
-  console.log(data);
-
-  if (!data.me) {
-    return (
-      <button onClick={requestCode} disabled={signIn}>
-        Sign In with Github
-      </button>
-    );
-  }
 
   const {
     me: { avatar, name },

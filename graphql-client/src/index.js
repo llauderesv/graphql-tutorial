@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
-import ApolloClient from 'apollo-boost';
+import ApolloClient, { InMemoryCache } from 'apollo-boost';
+import { persistCache } from 'apollo-cache-persist';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
@@ -9,8 +10,22 @@ import AuthorizedUser from './AuthorizedUser';
 
 import reportWebVitals from './reportWebVitals';
 
+const cache = new InMemoryCache();
+persistCache({
+  cache,
+  storage: localStorage,
+  key: '_data',
+});
+
+// Check cached if exists.
+if (localStorage['apollo-cache-persis']) {
+  let cachedData = JSON.parse(localStorage['apollo-cache-persis']);
+  console.log(cachedData);
+}
+
 const render = () => {
   const client = new ApolloClient({
+    cache,
     uri: 'http://localhost:4000/graphql',
     request: operation => {
       operation.setContext(context => ({

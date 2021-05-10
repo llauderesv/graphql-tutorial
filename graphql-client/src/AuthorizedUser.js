@@ -62,7 +62,15 @@ const AuthorizedUser = () => {
 
   if (loading) return <p>Signing In...</p>;
 
-  return <Me logout={onLogout} requestCode={onSignInGithub} signIn={signIn} />;
+  if (!signIn) {
+    return (
+      <button onClick={onSignInGithub} disabled={signIn}>
+        Sign In with Github
+      </button>
+    );
+  }
+
+  return <Me logout={onLogout} signIn={signIn} />;
 };
 
 export default AuthorizedUser;
