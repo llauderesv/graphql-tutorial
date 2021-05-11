@@ -1,6 +1,5 @@
-import { authorizeWithGithub } from '../lib';
 import fetch from 'node-fetch';
-import { toJson } from '../lib';
+import { authorizeWithGithub, toJson } from '../lib';
 
 const users = [
   { githubLogin: 'mHattrup', name: 'Mike Hattrup' },
@@ -90,24 +89,19 @@ const resolvers = {
       return newPhoto;
     },
     async githubAuth(parent, { code }, { db }) {
-      let {
-        message,
-        access_token,
-        avatar_url,
-        login,
-        name,
-      } = await authorizeWithGithub({
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-        code,
-      });
+      const { message, access_token, avatar_url, login, name } =
+        await authorizeWithGithub({
+          client_id: process.env.CLIENT_ID,
+          client_secret: process.env.CLIENT_SECRET,
+          code,
+        });
 
       // 2. If there is a message, something went wrong
       if (message) {
         throw new Error(message);
       }
       // 3. Package the results into a single object
-      let latestUserInfo = {
+      const latestUserInfo = {
         name,
         githubLogin: login,
         githubToken: access_token,

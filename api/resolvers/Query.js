@@ -8,7 +8,7 @@ const Query = {
   totalUsers: (_, args, { db }) =>
     db.collection('users').estimatedDocumentCount(),
   // Get all uploaded users...
-  allUsers: () => db.collection('users').find().array(),
+  allUsers: (_, args, { db }) => db.collection('users').find().array(),
 };
 
 export default Query;

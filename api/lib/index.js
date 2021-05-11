@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 const toJson = res => res.json();
-const throwError = error => new Error(`Error ocurred: ${throwError}`);
+const throwError = error => new Error(`Error ocurred: ${error}`);
 
 const requestGithubToken = ({ code, client_id, client_secret }) =>
   fetch('https://github.com/login/oauth/access_token', {

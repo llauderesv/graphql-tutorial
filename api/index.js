@@ -3,8 +3,8 @@ import mongodb from 'mongodb';
 import { readFileSync } from 'fs';
 import { ApolloServer } from 'apollo-server-express';
 import expressPlayground from 'graphql-playground-middleware-express';
-import resolvers from './resolvers';
 import dotenv from 'dotenv';
+import resolvers from './resolvers';
 
 const { MongoClient } = mongodb;
 
@@ -44,7 +44,7 @@ dotenv.config();
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async function ({ req }) {
+    context: async function context({ req }) {
       const githubToken = req.headers.authorization;
       // Get the current user who accessing the site...
       const currentUser = await db.collection('users').findOne({ githubToken });
@@ -54,10 +54,10 @@ dotenv.config();
 
   server.applyMiddleware({ app });
 
-  const _expressPlayground = expressPlayground.default;
+  const ExpressPlayGround = expressPlayground.default;
 
   app.get('/', (req, res) => res.end('Hello World!'));
-  app.get('/playground', _expressPlayground({ endpoint: '/graphql' }));
+  app.get('/playground', ExpressPlayGround({ endpoint: '/graphql' }));
 
   const PORT = process.env.PORT || 4000;
 
