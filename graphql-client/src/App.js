@@ -36,7 +36,7 @@ const Users = () => {
     return (
       <p>
         Error: {error}
-        <button name="retry" onClick={refetch}>
+        <button type="button" name="retry" onClick={refetch}>
           Retry
         </button>
       </p>
@@ -44,10 +44,13 @@ const Users = () => {
 
   const { totalUsers, allUsers } = data;
 
+  console.log('Hello World!');
+
   return (
     <div>
       <p>Total users: {totalUsers}</p>
       <button
+        type="button"
         name="add-user"
         onClick={() => addFakeUsers({ variables: { count: 3 } })}
       >
@@ -65,12 +68,10 @@ const Users = () => {
   );
 };
 
-const App = () => {
-  return (
-    <div className="App">
-      <Users />
-    </div>
-  );
-};
+const App = () => (
+  <div className="App">
+    <Users />
+  </div>
+);
 
 export default App;
