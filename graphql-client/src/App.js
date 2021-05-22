@@ -44,8 +44,6 @@ const Users = () => {
 
   const { totalUsers, allUsers } = data;
 
-  console.log('Hello World!');
-
   return (
     <div>
       <p>Total users: {totalUsers}</p>

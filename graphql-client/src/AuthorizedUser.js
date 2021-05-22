@@ -49,10 +49,7 @@ const AuthorizedUser = () => {
     const clientID = 'Iv1.d0f156a0fdfb0aa7';
 
     // Redirects to github
-    window.location =
-      'https://github.com/login/oauth/authorize?client_id=' +
-      clientID +
-      '&redirect_uri=http://localhost:3000&scope=user';
+    window.location = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:3000&scope=user`;
   };
 
   const onLogout = () => {
@@ -64,7 +61,7 @@ const AuthorizedUser = () => {
 
   if (!signIn) {
     return (
-      <button onClick={onSignInGithub} disabled={signIn}>
+      <button type="button" onClick={onSignInGithub} disabled={signIn}>
         Sign In with Github
       </button>
     );

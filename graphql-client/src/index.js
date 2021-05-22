@@ -1,12 +1,13 @@
+import './index.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import { persistCache } from 'apollo-cache-persist';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css';
-import App from './App';
 import AuthorizedUser from './AuthorizedUser';
+import App from './App';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -19,7 +20,7 @@ persistCache({
 
 // Check cached if exists.
 if (localStorage['apollo-cache-persis']) {
-  let cachedData = JSON.parse(localStorage['apollo-cache-persis']);
+  const cachedData = JSON.parse(localStorage['apollo-cache-persis']);
   console.log(cachedData);
 }
 
