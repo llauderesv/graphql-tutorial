@@ -14,8 +14,11 @@
   "plugins": ["react", "prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-console": 1,
+    "no-console": "warn",
+    "no-unused-vars": "warn",
     "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/require-default-props": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }

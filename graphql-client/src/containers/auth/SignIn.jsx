@@ -41,6 +41,7 @@ const AuthorizedUser = () => {
   useEffect(() => {
     if (window.location.search.match(/code=/)) {
       const code = window.location.search.replace('?code=', '');
+      console.log(code);
       githubSignIn({ variables: { code } });
     }
   }, []);
@@ -49,7 +50,7 @@ const AuthorizedUser = () => {
     const clientID = 'Iv1.d0f156a0fdfb0aa7';
 
     // Redirects to github
-    window.location = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:3000&scope=user`;
+    window.location = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:3000/auth/signin&scope=user`;
   };
 
   const onLogout = () => {

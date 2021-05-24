@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import { useEffect } from 'react';
 
 const ME_QUERY = gql`
   query me {
@@ -27,9 +27,15 @@ const Me = ({ logout }) => {
       <img src={avatar} width={48} height={48} alt={name} />
       <h1>{name}</h1>
 
-      <button onClick={logout}>Sign out</button>
+      <button type="button" onClick={logout}>
+        Sign out
+      </button>
     </div>
   );
+};
+
+Me.propTypes = {
+  logout: PropTypes.func.isRequired,
 };
 
 export default Me;

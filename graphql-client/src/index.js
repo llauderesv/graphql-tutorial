@@ -6,7 +6,6 @@ import { ApolloProvider } from 'react-apollo';
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import { persistCache } from 'apollo-cache-persist';
 import { BrowserRouter } from 'react-router-dom';
-import AuthorizedUser from './AuthorizedUser';
 import App from './App';
 
 import reportWebVitals from './reportWebVitals';
@@ -42,7 +41,6 @@ const render = () => {
     <ApolloProvider client={client}>
       <BrowserRouter>
         <React.StrictMode>
-          <AuthorizedUser />
           <App />
         </React.StrictMode>
       </BrowserRouter>
