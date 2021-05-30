@@ -1,0 +1,33 @@
+version: "3"
+
+networks:
+  graphql_tut:
+    driver: bridge
+
+services:
+  client:
+    container_name: "graphql-client"
+    depends_on: 
+      - api
+    build:
+      context: .
+      dockerfile: ./graphql-client/Dockerfile
+    ports: 
+      - 3000:3000
+    volumes: 
+      - ./graphql-client:/var/www/app/graphql_client
+      - /var/www/app/graphql_client/node_modules
+    networks: 
+      - graphql_tut
+  api:
+    container_name: "graphql-api"
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    ports: 
+      - 4000:4000
+    volumes:
+      - ./api:/var/www/app/api
+      - /var/www/app/api/node_modules
+    networks:
+      - graphql_tut

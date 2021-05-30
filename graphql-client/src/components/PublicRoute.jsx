@@ -3,12 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 
 const isUserLoggedIn = () => Boolean(localStorage.getItem('_token'));
 
-const PublicRoute = ({
-  render,
-  restricted,
-  component: Component,
-  ...restProps
-}) => (
+const PublicRoute = ({ restricted, component: Component, ...restProps }) => (
   <Route
     {...restProps}
     render={props =>
@@ -22,9 +17,8 @@ const PublicRoute = ({
 );
 
 PublicRoute.propTypes = {
-  render: PropTypes.func.isRequired,
   restricted: PropTypes.bool,
-  component: PropTypes.element,
+  component: PropTypes.elementType.isRequired,
 };
 
 export default PublicRoute;

@@ -3,12 +3,15 @@ const Query = {
   totalPhotos: (_, args, { db }) =>
     db.collection('photos').estimatedDocumentCount(),
   // Get all uploaded photos...
-  allPhotos: (_, args, { db }) => db.collection('photos').find().array(),
+  allPhotos: (_, args, { db }) => db.collection('photos').find().toArray(),
   // Get total number of users...
   totalUsers: (_, args, { db }) =>
     db.collection('users').estimatedDocumentCount(),
   // Get all uploaded users...
-  allUsers: (_, args, { db }) => db.collection('users').find().array(),
+  allUsers: async (_, args, { db }) => {
+    const users = await db.collection('users').find().toArray();
+    return users;
+  },
 };
 
 export default Query;

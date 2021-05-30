@@ -1,10 +1,12 @@
 import express from 'express';
 import mongodb from 'mongodb';
 import { readFileSync } from 'fs';
-import { ApolloServer } from 'apollo-server-express';
+import Apollo from 'apollo-server-express';
 import expressPlayground from 'graphql-playground-middleware-express';
 import dotenv from 'dotenv';
 import resolvers from './resolvers';
+
+const { ApolloServer } = Apollo;
 
 const { MongoClient } = mongodb;
 
