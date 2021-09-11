@@ -61,7 +61,7 @@ dotenv.config();
   app.get('/', (req, res) => res.end('Hello World!'));
   app.get('/playground', ExpressPlayGround({ endpoint: '/graphql' }));
 
-  const PORT = process.env.PORT || 4000;
+  const { PORT = 4000 } = process.env;
 
   app.listen(PORT, () => {
     console.log(
