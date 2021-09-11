@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-client
+spec:
+  replicas: 3
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: graphql-client
+  template:
+    metadata:
+      labels:
+        app: graphql-client
+    spec:
+      containers:
+        - image: llauderesv/graphql-client:v1
+          name: graphql-client
+          resources: {}

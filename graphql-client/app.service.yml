@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: graphql-client-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: graphql-client # used to select all pods with the same name select node-app
+  ports:
+  - port: 3000
+    targetPort: 3000
